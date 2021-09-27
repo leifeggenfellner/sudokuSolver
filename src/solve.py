@@ -53,10 +53,11 @@ def solveBoard(board, row, col):
     return False
 
 
-if solveBoard(board, 0, 0):
-    for i in range(9):
-        for j in range(9):
-            print(board[i][j], end=" ")
-        print()
-else:
-    print("No solution.")
+if __name__ == "__main__":
+    if solveBoard(board, 0, 0):
+        for i in range(9):
+            for j in range(9):
+                print(board[i][j], end=" ")
+            print()
+    else:
+        print("No solution.")
