@@ -1,11 +1,12 @@
 import pygame
 import solve
+from generate_grid import generate
 
 WIDTH = 550
 HEIGHT = 600
 background_color = (255, 255, 255)
 original_grid_element_color = (0, 0, 0)
-grid = solve.grid
+grid = generate()
 _buffer = 5
 
 
@@ -41,7 +42,7 @@ def insert(window, position):
                 return
 
 
-def main():
+def draw():
     pygame.init()
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Sudoku")
@@ -80,4 +81,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    draw()
