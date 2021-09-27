@@ -1,16 +1,13 @@
 import pygame
-import solve
-from generate_grid import generate
 
 WIDTH = 550
 HEIGHT = 600
 background_color = (255, 255, 255)
 original_grid_element_color = (0, 0, 0)
-grid = generate()
 _buffer = 5
 
 
-def insert(window, position):
+def insert(window, position, grid):
     myfont = pygame.font.SysFont("Comic Sans MS", 35)
 
     i, j = position[1] - 1, position[0] - 1
@@ -42,7 +39,7 @@ def insert(window, position):
                 return
 
 
-def draw():
+def draw(grid):
     pygame.init()
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Sudoku")
@@ -74,11 +71,7 @@ def draw():
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 position = pygame.mouse.get_pos()
-                insert(window, (position[0] // 50, position[1] // 50))
+                insert(window, (position[0] // 50, position[1] // 50), grid)
 
             if event.type == pygame.QUIT:
                 return
-
-
-if __name__ == "__main__":
-    draw()
