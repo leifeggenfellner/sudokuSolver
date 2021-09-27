@@ -1,4 +1,4 @@
-board = [
+grid = [
     [0, 0, 5, 3, 0, 0, 0, 0, 0],
     [8, 0, 0, 0, 0, 0, 0, 2, 0],
     [0, 7, 0, 0, 1, 0, 5, 0, 0],
@@ -11,53 +11,57 @@ board = [
 ]
 
 
-def isLegal(board, row, col, num):
-    for _col in range(9):
-        if board[row][_col] == num:
+def is_legal(grid, row, column, num):
+    for col in range(9):
+        if grid[row][col] == num:
             return False
 
     for _row in range(9):
-        if board[_row][col] == num:
+        if grid[_row][column] == num:
             return False
 
     startRow = row - row % 3
-    startCol = col - col % 3
+    startCol = column - column % 3
 
     for i in range(3):
         for j in range(3):
-            if board[i + startRow][j + startCol] == num:
+            if grid[i + startRow][j + startCol] == num:
                 return False
     return True
 
 
-def solveBoard(board, row, col):
-    if row == 8 and col == 9:
-        return True
+def solve_grid(grid, row, column, count):
+    if row == 8 and column == 9:
+        return 1 + count
 
-    if col == 9:
+    if column == 9:
         row += 1
-        col = 0
+        column = 0
 
-    if board[row][col] > 0:
-        return solveBoard(board, row, col + 1)
+    if grid[row][column] > 0:
+        return solve_grid(grid, row, column + 1, count)
 
     for num in range(1, 10):
-        if isLegal(board, row, col, num):
-            board[row][col] = num
+        if count >= 2:
+            return count
 
-            if solveBoard(board, row, col + 1):
+        if is_legal(grid, row, column, num):
+            grid[row][column] = num
+            count = solve_grid(grid, row, column + 1, count)
+
+            if solve_grid(grid, row, column + 1, count):
                 return True
 
-        board[row][col] = 0
+        grid[row][column] = 0
 
-    return False
+    return count
 
 
 if __name__ == "__main__":
-    if solveBoard(board, 0, 0):
+    if solve_grid(grid, 0, 0):
         for i in range(9):
             for j in range(9):
-                print(board[i][j], end=" ")
+                print(grid[i][j], end=" ")
             print()
     else:
         print("No solution.")
