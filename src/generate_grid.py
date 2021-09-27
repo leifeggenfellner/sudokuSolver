@@ -1,8 +1,6 @@
 from solve import solve_grid
 import random
 
-grid = [[0 for _ in range(9)] for _ in range(9)]
-
 
 def get_filled_squares(grid):
     filled = []
@@ -40,4 +38,7 @@ def remove_numbers(grid):
     return
 
 
-remove_numbers(grid)
+def generate():
+    grid = [[0 for _ in range(9)] for _ in range(9)]
+    remove_numbers(grid)
+    return grid
