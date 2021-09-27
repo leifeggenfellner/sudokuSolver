@@ -4,8 +4,8 @@ import solve
 WIDTH = 550
 HEIGHT = 600
 background_color = (255, 255, 255)
-original_board_element_color = (0, 0, 0)
-board = solve.board
+original_grid_element_color = (0, 0, 0)
+grid = solve.grid
 _buffer = 5
 
 
@@ -19,13 +19,13 @@ def insert(window, position):
             if event.type == pygame.QUIT:
                 return
             elif event.type == pygame.KEYDOWN:
-                if board[i][j] != 0:
+                if grid[i][j] != 0:
                     return
                 if event.key == 48 or event.key == 8:
                     if event.key == 48:
-                        board[i][j] = event.key - 48
+                        grid[i][j] = event.key - 48
                     else:
-                        board[i][j] = event.key - 8
+                        grid[i][j] = event.key - 8
                     pygame.draw.rect(window, background_color,
                                      (position[0] * 50 + _buffer, position[1] * 50 + _buffer, 50 - 2 * _buffer, 50 - 2 * _buffer))
                     pygame.display.update()
@@ -33,10 +33,10 @@ def insert(window, position):
                     pygame.draw.rect(window, background_color,
                                      (position[0] * 50 + _buffer, position[1] * 50 + _buffer, 50 - 2 * _buffer, 50 - 2 * _buffer))
                     value = myfont.render(
-                        str(event.key - 48), True, original_board_element_color)
+                        str(event.key - 48), True, original_grid_element_color)
                     window.blit(
                         value, (position[0] * 50 + 15, position[1] * 50))
-                    board[i][j]
+                    grid[i][j]
                     pygame.display.update()
                 return
 
@@ -60,11 +60,11 @@ def main():
             pygame.draw.line(window, (0, 0, 0), (50, 50 + 50 * i),
                              (500, 50 + 50 * i), 2)
 
-    for i in range(len(board[0])):
-        for j in range(len(board[0])):
-            if 0 < board[i][j] < 10:
+    for i in range(len(grid[0])):
+        for j in range(len(grid[0])):
+            if 0 < grid[i][j] < 10:
                 value = myfont.render(
-                    str(board[i][j]), True, original_board_element_color)
+                    str(grid[i][j]), True, original_grid_element_color)
                 window.blit(value, ((j + 1) * 50 + 15, (i + 1) * 50))
 
     pygame.display.update()
