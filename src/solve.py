@@ -55,13 +55,3 @@ def solve_grid(grid, row, column, count):
         grid[row][column] = 0
 
     return count
-
-
-if __name__ == "__main__":
-    if solve_grid(grid, 0, 0):
-        for i in range(9):
-            for j in range(9):
-                print(grid[i][j], end=" ")
-            print()
-    else:
-        print("No solution.")
