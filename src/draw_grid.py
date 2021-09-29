@@ -31,7 +31,7 @@ def insert(window, position, grid):
                     pygame.draw.rect(window, background_color,
                                      (position[0] * 50 + _buffer, position[1] * 50 + _buffer, 50 - 2 * _buffer, 50 - 2 * _buffer))
                     value = myfont.render(
-                        str(event.key - 48), True, original_grid_element_color)
+                        str(event.key - 48), True, (0, 0, 255))
                     window.blit(
                         value, (position[0] * 50 + 15, position[1] * 50))
                     grid[i][j]
