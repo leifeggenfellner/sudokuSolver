@@ -1,14 +1,13 @@
 import generate_grid
 import draw_grid
-import solve
+# import solve
 
 
 def main():
-    grid = generate_grid.generate()
-    grid_copy = [row[:] for row in grid]
-    solve.solve_grid(grid, 0, 0, 0)
+    grid = [[0 for _ in range(9)] for _ in range(9)]
 
-    draw_grid.draw(grid_copy)
+    grid = generate_grid.generate(grid)
+    draw_grid.draw(grid)
 
 
 if __name__ == "__main__":
