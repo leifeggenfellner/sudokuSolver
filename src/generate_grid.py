@@ -1,44 +1,76 @@
-from solve import solve_grid
-import random
+from random import randint, shuffle
+import solve
 
+number_list = [i for i in range(1, 10)]
 
-def get_filled_squares(grid):
-    filled = []
+def fill_grid(grid):
 
-    for i in range(9):
-        for j in range(9):
-            if grid[i][j] != 0:
-                filled.append([i, j])
+    for i in range(81):
+        row = i // 9
+        col = i % 9
 
-    return filled
+        if grid[row][col]==0:
+            shuffle(number_list)      
+            for value in number_list:
+                if not(value in grid[row]):
+                    if not value in (grid[0][col],grid[1][col],grid[2][col],grid[3][col],grid[4][col],grid[5][col],grid[6][col],grid[7][col],grid[8][col]):
+                        square=[]
+                        if row < 3:
+                            if col < 3:
+                                square=[grid[i][0:3] for i in range(0,3)]
+                            elif col < 6:
+                                square=[grid[i][3:6] for i in range(0,3)]
+                            else:  
+                                square=[grid[i][6:9] for i in range(0,3)]
+                        elif row<6:
+                            if col<3:
+                                square=[grid[i][0:3] for i in range(3,6)]
+                            elif col<6:
+                                square=[grid[i][3:6] for i in range(3,6)]
+                            else:  
+                                square=[grid[i][6:9] for i in range(3,6)]
+                        else:
+                            if col<3:
+                                square=[grid[i][0:3] for i in range(6,9)]
+                            elif col<6:
+                                square=[grid[i][3:6] for i in range(6,9)]
+                            else:  
+                                square=[grid[i][6:9] for i in range(6,9)]
+                        if not value in (square[0] + square[1] + square[2]):
+                            grid[row][col]=value
+                            if solve.check_grid(grid):
+                                return True
+                            else:
+                                if fill_grid(grid):
+                                    return True
+            break
+    grid[row][col]=0
 
+def generate(grid):
+    fill_grid(grid)
 
-def remove_numbers(grid):
-    count = solve_grid(grid, 0, 0, 0)
+    attempts = 10
+    solve.counter = 1
 
-    filled_squares = get_filled_squares(grid)
-    filled_squares_count = len(get_filled_squares(grid))
+    while attempts > 0:
+        row = randint(0, 8)
+        col = randint(0, 8)
 
-    rounds = 3
+        while grid[row][col] == 0:
+            row = randint(0, 8)
+            col = randint(0, 8)
 
-    while rounds > 0 and filled_squares_count >= 17:
-        row, column = filled_squares.pop(
-            random.randint(0, len(filled_squares) - 1))
-        filled_squares_count -= 1
+        backup = grid[row][col]
+        grid[row][col] = 0
 
-        removed_square = grid[row][column]
-        grid[row][column] = 0
+        copy_grid = [row[:] for row in grid]
 
-        grid_copy = [i[:] for i in grid]
+        solve.counter = 0
+        solve.solve_grid(copy_grid)
 
-        if solve_grid(grid_copy, 0, 0, count) != 1:
-            grid[row][column] = removed_square
-            filled_squares_count += 1
-            rounds -= 1
-    return
-
-
-def generate():
-    grid = [[0 for _ in range(9)] for _ in range(9)]
-    remove_numbers(grid)
+        if solve.counter != 1:
+            grid[row][col] = backup
+            attempts -= 1
+    
     return grid
+    
