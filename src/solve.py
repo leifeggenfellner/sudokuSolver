@@ -1,57 +1,53 @@
-grid = [
-    [0, 0, 5, 3, 0, 0, 0, 0, 0],
-    [8, 0, 0, 0, 0, 0, 0, 2, 0],
-    [0, 7, 0, 0, 1, 0, 5, 0, 0],
-    [4, 0, 0, 0, 0, 5, 3, 0, 0],
-    [0, 1, 0, 0, 7, 0, 0, 0, 6],
-    [0, 0, 3, 2, 0, 0, 0, 8, 0],
-    [0, 6, 0, 5, 0, 0, 0, 0, 9],
-    [0, 0, 4, 0, 0, 0, 0, 3, 0],
-    [0, 0, 0, 0, 0, 9, 7, 0, 0]
-]
+counter = 0
 
-
-def is_legal(grid, row, column, num):
-    for col in range(9):
-        if grid[row][col] == num:
-            return False
-
-    for _row in range(9):
-        if grid[_row][column] == num:
-            return False
-
-    startRow = row - row % 3
-    startCol = column - column % 3
-
-    for i in range(3):
-        for j in range(3):
-            if grid[i + startRow][j + startCol] == num:
+def check_grid(grid):
+    for row in range(0, 9):
+        for col in range(0, 9):
+            if grid[row][col] == 0:
                 return False
     return True
 
+def solve_grid(grid):  
+    global counter
+    
+    for i in range(81):
+        row = i // 9
+        col = i % 9
 
-def solve_grid(grid, row, column, count):
-    if row == 8 and column == 9:
-        return 1 + count
+        if grid[row][col] == 0:
+            for value in range(1, 10):
+                if not(value in grid[row]):
+                    if not value in (grid[0][col],grid[1][col],grid[2][col],grid[3][col],grid[4][col],grid[5][col],grid[6][col],grid[7][col],grid[8][col]):
+                        square = []
+                        if row<3:
+                            if col<3:
+                                square=[grid[i][0:3] for i in range(0,3)]
+                            elif col<6:
+                                square=[grid[i][3:6] for i in range(0,3)]
+                            else:  
+                                square=[grid[i][6:9] for i in range(0,3)]
+                        elif row<6:
+                            if col<3:
+                                square=[grid[i][0:3] for i in range(3,6)]
+                            elif col<6:
+                                square=[grid[i][3:6] for i in range(3,6)]
+                            else:  
+                                square=[grid[i][6:9] for i in range(3,6)]
+                        else:
+                            if col<3:
+                                square=[grid[i][0:3] for i in range(6,9)]
+                            elif col<6:
+                                square=[grid[i][3:6] for i in range(6,9)]
+                            else:  
+                                square=[grid[i][6:9] for i in range(6,9)]
 
-    if column == 9:
-        row += 1
-        column = 0
-
-    if grid[row][column] > 0:
-        return solve_grid(grid, row, column + 1, count)
-
-    for num in range(1, 10):
-        if count >= 2:
-            return count
-
-        if is_legal(grid, row, column, num):
-            grid[row][column] = num
-            count = solve_grid(grid, row, column + 1, count)
-
-            if solve_grid(grid, row, column + 1, count):
-                return True
-
-        grid[row][column] = 0
-
-    return count
+                        if not value in (square[0] + square[1] + square[2]):
+                            grid[row][col]=value
+                            if check_grid(grid):
+                                counter += 1
+                                break
+                            else:
+                                if solve_grid(grid):
+                                    return True
+            break
+    grid[row][col]=0  
