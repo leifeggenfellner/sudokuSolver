@@ -49,8 +49,7 @@ def fill_grid(grid):
 def generate(grid):
     fill_grid(grid)
 
-    attempts = 10
-    solve.counter = 1
+    attempts = 5
 
     while attempts > 0:
         row = randint(0, 8)
@@ -66,7 +65,7 @@ def generate(grid):
         copy_grid = [row[:] for row in grid]
 
         solve.counter = 0
-        solve.solve_grid(copy_grid)
+        solve.solve_grid_generate(copy_grid)
 
         if solve.counter != 1:
             grid[row][col] = backup
