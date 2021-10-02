@@ -7,7 +7,7 @@ def check_grid(grid):
                 return False
     return True
 
-def solve_grid(grid):  
+def solve_grid_generate(grid):  
     global counter
     
     for i in range(81):
@@ -47,7 +47,50 @@ def solve_grid(grid):
                                 counter += 1
                                 break
                             else:
-                                if solve_grid(grid):
+                                if solve_grid_generate(grid):
                                     return True
             break
     grid[row][col]=0  
+
+def find_next_cell_to_fill(grid, row, column):
+    for _row in range(row, 9):
+        for _column in range(column, 9):
+            if grid[_row][_column] == 0:
+                return _row, _column
+    
+    for _row in range(9):
+        for _column in range(9):
+            if grid[_row][_column] == 0:
+                return _row, _column
+    
+    return -1, -1
+
+
+def is_valid(grid, row, column, number):
+    row_valid = all([number != grid[row][_column] for _column in range(9)])
+    
+    if row_valid:
+        column_valid = all([number != grid[_row][column] for _row in range(9)])
+
+        if column_valid:
+            secTopRow, secTopColumn = 3 * (row // 3), 3 * (column // 3)
+            for _row in range(secTopRow, secTopRow + 3):
+                for _column in range(secTopColumn, secTopColumn + 3):
+                    if grid[_row][_column] == number:
+                        return False
+            return True
+    return False
+
+
+def solve_grid(grid, row=0, column=0):    
+    row, column = find_next_cell_to_fill(grid, row, column)
+
+    if row == -1:
+        return True
+    for number in range(1, 10):
+        if is_valid(grid, row, column, number):
+            grid[row][column] = number
+            if solve_grid(grid, row, column):
+                return True
+            grid[row][column] = 0
+    return False
